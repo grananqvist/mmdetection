@@ -151,7 +151,7 @@ if __name__ == '__main__':
             'Programming Language :: Python :: 3.6',
         ],
         license='Apache License 2.0',
-        setup_requires=['pytest-runner', 'cython', 'numpy'],
+        install_requires=['pytest-runner', 'cython', 'numpy'],
         tests_require=['pytest'],
         install_requires=get_requirements(),
         ext_modules=[

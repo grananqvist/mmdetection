@@ -22,6 +22,7 @@ def coco_eval(result_files, result_types, coco, max_dets=(100, 300, 1000)):
             print('AR@{}\t= {:.4f}'.format(num, ar[i]))
         return
 
+    coco_evals = []
     for res_type in result_types:
         result_file = result_files[res_type]
         assert result_file.endswith('.json')
@@ -37,6 +38,10 @@ def coco_eval(result_files, result_types, coco, max_dets=(100, 300, 1000)):
         cocoEval.evaluate()
         cocoEval.accumulate()
         cocoEval.summarize()
+
+        coco_evals.append(cocoEval)
+
+    return coco_evals
 
 
 def fast_eval_recall(results,

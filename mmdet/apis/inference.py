@@ -95,7 +95,8 @@ def show_result(img,
                 score_thr=0.3,
                 wait_time=0,
                 show=True,
-                out_file=None):
+                out_file=None,
+                color_dict=None):
     """Visualize the detection results on the image.
 
     Args:
@@ -123,10 +124,15 @@ def show_result(img,
     bboxes = np.vstack(bbox_result)
     # draw segmentation masks
     if segm_result is not None:
+        classes = mmcv.concat_list([[i+1]*len(segm_cls) for i, segm_cls in enumerate(segm_result)])
         segms = mmcv.concat_list(segm_result)
         inds = np.where(bboxes[:, -1] > score_thr)[0]
         for i in inds:
-            color_mask = np.random.randint(0, 256, (1, 3), dtype=np.uint8)
+            cls = classes[i]
+            if color_dict is not None:
+                color_mask = color_dict[cls]
+            else:
+                color_mask = np.random.randint(0, 256, (1, 3), dtype=np.uint8)
             mask = maskUtils.decode(segms[i]).astype(np.bool)
             img[mask] = img[mask] * 0.5 + color_mask * 0.5
     # draw bounding boxes
@@ -152,7 +158,8 @@ def show_result_pyplot(img,
                        result,
                        class_names,
                        score_thr=0.3,
-                       fig_size=(15, 10)):
+                       fig_size=(15, 10),
+                       color_dict=None):
     """Visualize the detection results on the image.
 
     Args:
@@ -166,6 +173,6 @@ def show_result_pyplot(img,
             be written to the out file instead of shown in a window.
     """
     img = show_result(
-        img, result, class_names, score_thr=score_thr, show=False)
+        img, result, class_names, score_thr=score_thr, show=False, color_dict=color_dict)
     plt.figure(figsize=fig_size)
     plt.imshow(mmcv.bgr2rgb(img))

@@ -62,10 +62,16 @@ class HybridTaskCascade(CascadeRCNN):
                     bbox_semantic_feat, bbox_feats.shape[-2:])
             bbox_feats += bbox_semantic_feat
 
+        #print('gt_bboxes', gt_bboxes)
+        #print('gt_labels', gt_labels)
+
         cls_score, bbox_pred = bbox_head(bbox_feats)
+        #print('cls score', cls_score, cls_score.shape)
+        #print('bbox_pred', bbox_pred, bbox_pred.shape)
 
         bbox_targets = bbox_head.get_target(sampling_results, gt_bboxes,
                                             gt_labels, rcnn_train_cfg)
+        #print('bbbox_targets', bbox_targets)
         loss_bbox = bbox_head.loss(cls_score, bbox_pred, *bbox_targets)
         return loss_bbox, rois, bbox_targets, bbox_pred
 

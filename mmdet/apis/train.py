@@ -215,7 +215,7 @@ def _non_dist_train(model, dataset, cfg, validate=False):
                                    cfg.checkpoint_config, cfg.log_config)
 
     if cfg.resume_from:
-        runner.resume(cfg.resume_from)
+        runner.resume(cfg.resume_from, resume_optimizer=cfg.resume_optimizer)
     elif cfg.load_from:
         runner.load_checkpoint(cfg.load_from)
     runner.run(data_loaders, cfg.workflow, cfg.total_epochs)
